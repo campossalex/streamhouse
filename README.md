@@ -1,10 +1,10 @@
-# StreamHouse Hands-on
+# Streamhouse Hands-on
 
-The StreamHouse workshop on open source only — **Apache Flink 1.20**, **Apache
+The Streamhouse workshop on open source only — **Apache Flink 1.20**, **Apache
 Fluss 0.9.1** and **Apache Iceberg 1.10**, with Lakekeeper, MinIO, Trino, Kafka
 (Redpanda), PostgreSQL and Grafana — all in one Docker Compose stack.
 
-![](docs/streamhouse_diagram.png)
+![](docs/Streamhouse_diagram.png)
 
 This page is how to deploy it. Once it is up:
 
