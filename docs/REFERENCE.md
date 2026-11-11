@@ -193,7 +193,7 @@ want to submit another job that reads Kafka or CDC.
 
 | Concern | How this workshop does it |
 |---------|---------------------------|
-| Versions | Flink 1.20 (`apache/flink:1.20-java17`), Fluss 0.9.1-incubating, Iceberg 1.10.1 — the same versions the VVP edition's tiering setup uses |
+| Versions | Flink 1.20 (`apache/flink:1.20-java17`), Fluss 1.0.0, Iceberg 1.10.1 (the Iceberg build bundled in `fluss-lake-iceberg` 1.0.0) |
 | Fluss config | `FLUSS_PROPERTIES` env var, appended to `server.yaml` by the image's entrypoint. Not a bind-mounted `server.yaml`: the entrypoint edits that file in place with `sed -i` |
 | Fluss remote storage | A shared named volume at `/fluss/remote-data`, not `s3://` — see below |
 | Iceberg catalog | Lakekeeper warehouse `lakehouse`, `sts-enabled: false`, `remote-signing-enabled: false`, static MinIO keys everywhere |
@@ -249,10 +249,13 @@ the table. Then look at the TaskManager:
 docker compose logs taskmanager | grep -E "Committed snapshot|Exception" | tail
 ```
 
-**The coordinator logs `Fail to change state for table N from Scheduled to Tiered`.**
-Harmless. Fluss 0.9.1's coordinator logs this pair of ERRORs at nearly every tiering
-commit in this setup, whatever the freshness, while the commits themselves succeed —
-check with the `$snapshots` query in `trino_sql/lakehouse.sql`.
+**A read of a newly added column fails with `Projected fields [N] is out of bound for
+schema with N fields`.** `ALTER TABLE ... ADD` on a tiered table updates Fluss and the
+Iceberg table, but a job already writing to it keeps writing the old schema, and any read
+that selects the new column fails on those records. Stop the writer with a savepoint, add
+the column to its `SELECT` (Fluss rejects an `INSERT` column list on a Log table as a
+partial update), and restore it from the savepoint. The read works again once tiering has
+committed past the last old-schema record.
 
 **A Fluss table can't be tiered: the ALTER fails, or its Iceberg table never fills.**
 The table was created before the servers had `datalake.format: iceberg`. That setting is

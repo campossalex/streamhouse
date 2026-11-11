@@ -107,7 +107,7 @@ STEPS
 
 # ── Step 1: Download connector JARs ───────────────────────────────────────────
 
-if [ ! -f lib/tiering/fluss-flink-tiering-0.9.1-incubating.jar ] || [ -z "$(ls -A lib/*.jar 2>/dev/null)" ]; then
+if [ ! -f lib/tiering/fluss-flink-tiering-1.0.0.jar ] || [ -z "$(ls -A lib/*.jar 2>/dev/null)" ]; then
   echo "==> Downloading connector JARs..."
   bash scripts/download-jars.sh
 else

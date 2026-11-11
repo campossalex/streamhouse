@@ -17,8 +17,8 @@ set -euo pipefail
 
 MAVEN="https://repo1.maven.org/maven2"
 FLINK_VERSION="1.20"
-FLUSS_VERSION="0.9.1-incubating"
-# Must match the Iceberg build bundled inside fluss-lake-iceberg (0.9.1-incubating ships
+FLUSS_VERSION="1.0.0"
+# Must match the Iceberg build bundled inside fluss-lake-iceberg (1.0.0 ships
 # Iceberg 1.10.1). A mismatch surfaces as NoSuchMethodError at the first tiering commit.
 # Verify with:  unzip -p lib/fluss-lake-iceberg-*.jar iceberg-build.properties
 ICEBERG_VERSION="1.10.1"
@@ -40,6 +40,17 @@ download() {
   curl -fsSL -o "$LIB_DIR/$filename.part" "$url"
   mv "$LIB_DIR/$filename.part" "$LIB_DIR/$filename"
 }
+
+# Fluss JARs of any other version, left by an earlier run. Every lib/*.jar goes onto the
+# Flink classpath, and tiering.sh / the SQL editor take the first fluss-flink-tiering-*.jar,
+# so a stale one would load two Fluss versions side by side.
+for stale in "$LIB_DIR"/fluss-*.jar "$LIB_DIR"/tiering/fluss-*.jar; do
+  [ -e "$stale" ] || continue
+  case "$(basename "$stale")" in
+    *"-${FLUSS_VERSION}.jar") ;;
+    *) echo "  [remove] $(basename "$stale") (not Fluss ${FLUSS_VERSION})"; rm -f "$stale" ;;
+  esac
+done
 
 echo "==> Fluss: Flink connector + the tiering service..."
 download "fluss-flink-${FLINK_VERSION}-${FLUSS_VERSION}.jar" \

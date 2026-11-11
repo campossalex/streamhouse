@@ -1,7 +1,7 @@
 # Streamhouse Hands-on
 
 The Streamhouse workshop on open source only — **Apache Flink 1.20**, **Apache
-Fluss 0.9.1** and **Apache Iceberg 1.10**, with Lakekeeper, MinIO, Trino, Kafka
+Fluss 1.0** and **Apache Iceberg 1.10**, with Lakekeeper, MinIO, Trino, Kafka
 (Redpanda), PostgreSQL and Grafana — all in one Docker Compose stack.
 
 ![](docs/streamhouse_diagram.png)
