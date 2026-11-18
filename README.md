@@ -34,9 +34,8 @@ tested on Apple Silicon and is built for x86_64 EC2 instances.
 ## Run locally
 
 ```bash
-git clone https://github.com/campossalex/streaming_lakehouse.git
-cd streaming_lakehouse
-
+git clone https://github.com/campossalex/streamhouse.git
+cd streamhouse
 ./start.sh --services-only
 ```
 
