@@ -103,8 +103,8 @@ Log out and back in (for the `docker` group), then:
 ```bash
 docker compose version      # must be ≥ 2.20
 
-git clone https://github.com/campossalex/streaming_lakehouse.git
-cd streaming_lakehouse
+git clone https://github.com/campossalex/streamhouse.git
+cd streamhouse
 ./start.sh --services-only
 ```
 
@@ -112,7 +112,7 @@ On Ubuntu, `curl -fsSL https://get.docker.com | sudo sh` installs Docker with th
 Compose plugin in one step.
 
 No clone access on the instance? Copy the directory instead:
-`rsync -av --exclude lib/ --exclude .git/ ./ ec2-user@<host>:streaming_lakehouse/`
+`rsync -av --exclude lib/ --exclude .git/ ./ ec2-user@<host>:streamhouse/`
 (`start.sh` downloads `lib/` on the instance).
 
 ### 3. Network
